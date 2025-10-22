@@ -129,16 +129,36 @@ jobs:
         cd workspace
         repo sync -j$(nproc --all) --force-sync
 
-    - name: Download boot.img
+    - name: Download and Extract boot.img
       run: |
         cd workspace
+        echo "⬇️ Downloading boot.zip..."
+        wget -O boot.zip https://github.com/KY-DEV1/x6525b-boot/raw/main/boot.zip
+        echo "📦 Extracting boot.zip..."
+        unzip -o boot.zip
+        if [ -f boot.img ]; then
+          echo "✅ boot.img extracted successfully!"
+        else
+          echo "❌ boot.img not found after extraction!"
+          exit 1
+        fi
         mkdir -p device/infinix/x6525b
-        cd device/infinix/x6525b
-        echo "📥 Downloading boot.img..."
-        wget -O boot.img "https://github.com/KY-DEV1/x6525b-boot/raw/main/boot.zip"
-        echo "✅ boot.img downloaded!"
-        cd ../../../
+        mv boot.img device/infinix/x6525b/
         echo "COMMIT_ID=localbuild" >> $GITHUB_ENV
+
+    - name: Generate Minimal Device Tree
+      run: |
+        cd workspace
+        echo "🔧 Generating minimal device tree for x6525b..."
+        mkdir -p device/infinix/x6525b
+        cp device/infinix/x6525b/boot.img device/infinix/x6525b/
+        echo "PRODUCT_MAKEFILES := \$(LOCAL_DIR)/twrp_x6525b.mk" > device/infinix/x6525b/AndroidProducts.mk
+        echo 'PRODUCT_DEVICE := x6525b' > device/infinix/x6525b/twrp_x6525b.mk
+        echo 'PRODUCT_NAME := twrp_x6525b' >> device/infinix/x6525b/twrp_x6525b.mk
+        echo 'PRODUCT_BRAND := Infinix' >> device/infinix/x6525b/twrp_x6525b.mk
+        echo 'PRODUCT_MODEL := X6525B' >> device/infinix/x6525b/twrp_x6525b.mk
+        echo 'PRODUCT_MANUFACTURER := Infinix' >> device/infinix/x6525b/twrp_x6525b.mk
+        echo "✅ Minimal device tree generated."
 
     - name: Check Build Makefile
       run: |
