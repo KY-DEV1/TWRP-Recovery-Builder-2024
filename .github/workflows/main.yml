@@ -151,7 +151,6 @@ jobs:
         cd workspace
         echo "🔧 Generating minimal device tree for x6525b..."
         mkdir -p device/infinix/x6525b
-        cp device/infinix/x6525b/boot.img device/infinix/x6525b/
         echo "PRODUCT_MAKEFILES := \$(LOCAL_DIR)/twrp_x6525b.mk" > device/infinix/x6525b/AndroidProducts.mk
         echo 'PRODUCT_DEVICE := x6525b' > device/infinix/x6525b/twrp_x6525b.mk
         echo 'PRODUCT_NAME := twrp_x6525b' >> device/infinix/x6525b/twrp_x6525b.mk
