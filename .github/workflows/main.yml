@@ -135,7 +135,7 @@ jobs:
         mkdir -p device/infinix/x6525b
         cd device/infinix/x6525b
         echo "📥 Downloading boot.img..."
-        wget -O boot.img "https://github.com/KY-DEV1/x6525b-boot/raw/main/boot.img"
+        wget -O boot.img "https://github.com/KY-DEV1/x6525b-boot/raw/main/boot.zip"
         echo "✅ boot.img downloaded!"
         cd ../../../
         echo "COMMIT_ID=localbuild" >> $GITHUB_ENV
